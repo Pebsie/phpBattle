@@ -6,19 +6,23 @@
 <center>
 <?
 	include 'connect.php';
-	
+
 ?>
 	<form action="chat.php" method="post">
 	<input type="text" name="msg" size="10">
 	<input type="submit" value="Send">
-	</form> 
+	</form>
 <?
 
 	$message = $_POST['msg'];
 	if ($message == "") {
 		//donothing
 	} else {
-		mysql_query("INSERT INTO chat (sender, message) VALUES ('".$_SESSION['userphpb']."', '".$message."')");
+			if (strpos($a, 'nigger') !== false) {
+	    echo 'true';
+		}	else {
+			mysql_query("INSERT INTO chat (sender, message) VALUES ('".$_SESSION['userphpb']."', '".$message."')");
+		}
 	}
 
 	echo "<a href='chat.php'>Refresh Chat</a>";

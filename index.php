@@ -3,7 +3,7 @@
 	session_start();
 	?>
 	<head><title>phpBattle</title>
-
+		<a href='logout.php'>Stuck in NAME, my King? CLICK HERE!!</a>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
@@ -28,16 +28,14 @@
                 }
             }
         </script>
-
-
 </head>
 
 	<body bgcolor="#FFF3E0">
 	<center><META http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-	<font color="#E65100"><h1>phpBattle</h1><a href='http://ukip.org'</a><img src='img/advert.png'></a><br><br><a href='help.html'>TUTORIAL (READ THIS!)</a><br><br>
-	<div id="spoiler" style="display:none"> 
-	<font size=0.5>Your soldiers will now set up camp if enough of them are on a tile.<br>Round #1 begins!<br>Moving your troops is now a bit easier!<br><a href='http://i.imgur.com/WqWEl6T.png'>The south will rise again</a><br><br></font>
-	</div> 
+	<font color="#E65100"><h1>phpBattle</h1><br><br><a href='help.html'>TUTORIAL (READ THIS!)</a><br><br>
+	<div id="spoiler" style="display:none">
+	<font size=0.5>13/8/17: Added new building type, Silo. You now need 1 Silo for each 100 Wood and 50 Food you store. Fixed Gold icon not displaying. Server reset.<br><a href='http://i.imgur.com/WqWEl6T.png'>The south will rise again</a><br><br></font>
+	</div>
 	<button title="Click to show/hide content" type="button" onclick="if(document.getElementById('spoiler') .style.display=='none') {document.getElementById('spoiler') .style.display=''}else{document.getElementById('spoiler') .style.display='none'}">Show News</button>
 	<hr><br>
 
@@ -69,7 +67,7 @@
 		Password: <input type="password" name="password">
 		<br>
 		<input type="submit" value="Login/Register">
-		</form> 
+		</form>
 		<font size=0.5>If an account doesn't exist yet, it'll be created with the information you enter here.</font>
 
 		<?
@@ -111,7 +109,7 @@
 				} elseif ($pl['level'] == 4) {
 					echo "Unlocked: Elves (race)<br>";
 				}
-				
+
 			}
 			echo "You have ".$xp."xp/".($pl['level']*250)."xp for level ".($pl['level']+1)."<br>";
 			echo "<br><br><h2>Battle #".$rI['round']." begins!</h2>World has been reset.<br>Chat has been reset.<br>Earnings have been reset.<br><br><a href='index.php'>Enter Game</a>";
@@ -119,7 +117,7 @@
 			mysql_query("UPDATE users SET cash=100, wood=100, population=100, food=150, login=1, kills=0, wins=".($pl['wins']+1).", exp=".$xp.", level=".$pl['level'].", round=1 WHERE username='".$user."';");
 
 		} else {
-		
+
 			$a = $_GET['a'];
 
 			if ($pl['login'] == 1) {
@@ -147,7 +145,7 @@
 
 			} else {
 
-				
+
 				if ($a == "move") { //this is for camera movemement, use the action "travel" for unit movement via the fast travel system
 					$dir = $_GET['dir'];
 					$_SESSION['dir'] = $dir;
@@ -166,7 +164,7 @@
 				} elseif ($a == "castle") {
 					$result = mysql_query("SELECT * FROM world WHERE owner='".$user."';");
 					$foundCastle = false;
-					
+
 					while ($row = mysql_fetch_assoc($result)) {
 						if ($row['type'] == "Castle") {
 							$foundCastle = true;
@@ -188,7 +186,7 @@
 				        }
 					}
 
-					
+
 					echo "Warped to your castle!";
 				} elseif ($a == "logout") {
 					$_SESSION['userphpb'] = "";
@@ -262,22 +260,22 @@
 								$myLoss = rand(round($t2Info['units']/4), round($t2Info['units']));
 
 								echo "<br>You killed ".$myKills." units.<br>You lost ".$myLoss." units.<br>";
-		
+
 
 								mysql_query("UPDATE users SET kills=".($pl['kills']+$myKills)." WHERE username='".$user."';");
-								
+
 								$t2Info['units'] = $t2Info['units'] - $myKills;
 								$tInfo['units'] = $tInfo['units'] - $myLoss;
 
 
-							
+
 								if ($t2Info['units'] < 1) {
 									if ($t2Info['owner'] == "NPC" or $t2Info['owner'] == "Food") {
 										$t2Info['type'] = "Grass";
-									} 
-									
+									}
+
 									if ($t2Info['owner'] == "Food") {
-	                 					 mysql_query("UPDATE users SET food=".($pl['food']+$t2Info['worth'])." WHERE username='".$user."';"); 
+	                 					 mysql_query("UPDATE users SET food=".($pl['food']+$t2Info['worth'])." WHERE username='".$user."';");
 									}
 
 									$t2Info['owner'] = "";
@@ -291,7 +289,7 @@
 
 								mysql_query("UPDATE world SET units='".($t2Info['units'])."', owner='".$t2Info['owner']."', type='".$t2Info['type']."' WHERE id=".$headTile.";");
 								mysql_query("UPDATE world SET units='".($tInfo['units'])."', owner='".$tInfo['owner']."' WHERE id=".$thisTile.";");
-								
+
 
 
 							}
@@ -318,11 +316,11 @@
 							$thisPos = $thisPos + 1;
 
 						} elseif ($imgRows == 5) {
-							
+
 							$min = $tile-5;
 							$max = $tile+5;
 							$thisPos = $thisPos + 1;
-						
+
 						} else {
 
 							$min = $tile-(100*$thisPos)-5;
@@ -353,7 +351,7 @@
 								echo "<font color='White' size=0.5>";
 
 							} else {
-								if ($row['owner'] == $user) { 
+								if ($row['owner'] == $user) {
 									echo "<a href='index.php?a=sel&t=".$row['id']."'><font color='Yellow' size=0.5>";
 								} elseif ($row['owner'] == "") {
 									echo "<font color='White' size=0.5>";
@@ -361,7 +359,7 @@
 									echo "<font color='Red' size=0.5><b>";
 								}
 
-								
+
 							}
 
 							$view = $_SESSION['view'];
@@ -388,7 +386,7 @@
 							if ($row['owner'] == $user) {
 								echo "</a>";
 							}
-						}	
+						}
 						echo "</tr>";
 						$imgRows = $imgRows + 1;
 					}
@@ -402,6 +400,7 @@
 				$newWood = 0;
 				$newPop = 0;
 				$newFood = 0;
+				$maxStore = 50;
 				$query = "SELECT * FROM world WHERE owner='".$user."';";
 				$result = mysql_query($query);
 				while ($row = mysql_fetch_assoc($result)) { //this system NEEDS to be updated! It should pull the tile type and then look it up in the
@@ -412,18 +411,19 @@
 					if ($row['type'] == "Lumberjack") { $newWood = $newWood + 5; }
 					if ($row['type'] == "Barracks") { $newPop = $newPop - 5; }
 					if ($row['type'] == "Outpost") { $newPop = $newPop - 1; }
+					if ($row['type'] == "Silo") { $maxStore = $maxStore + 50; }
 				}
 
 				$newFood = $newFood - $pl['population'];
 
-				echo "Hi there, <b>".$user."</b>! <br><img src='http://www.goldsilverrate.com/images/gold_mini_icon.png'>".($pl['cash']/100)."<i>(+".$newGold.")</i><img src='img/tree.png'>".$pl['wood']."<i>(+".$newWood.")</i><img src='img/People.png'>".$pl['population']."<i>(+".$newPop.")</i><img src='img/food.png'>".$pl['food']."<i>(+".$newFood.")</i><br><br><a href='map.php'><img src='img/map.png'></a><br>";
-				
+				echo "Hi there, <b>".$user."</b>! <br><img src='img/gold.png'>".($pl['cash']/100)."<i>(+".$newGold.")</i><img src='img/tree.png'>".$pl['wood']."/".($maxStore*2)."<i>(+".$newWood.")</i><img src='img/People.png'>".$pl['population']."<i>(+".$newPop.")</i><img src='img/food.png'>".$pl['food']."/".$maxStore."<i>(+".$newFood.")</i><br><br><a href='map.php'><img src='img/map.png'></a><br>";
+
 				if ($a == "sel") {
 					$tInfo = mysql_fetch_array(mysql_query("SELECT * FROM world WHERE id='".$_GET['t']."';"));
 					if ($tInfo['owner'] == $user) {
 
 						echo "Selected a <b>".$tInfo['type']."</b> tile (<b>".$tInfo['units']."</b> units)<br>";
-					
+
 						echo "<a href='index.php?a=build&t=".$tInfo['id']."'>Build</a>";
 
 						echo "<form action='index.php?a=moveUnits' method='post'>Move <input type='number' name='unitCount' min='1' max='".($tInfo['units']-1)."' value='".($tInfo['units']-1)."'> units <select name='direction'><option value='north'>North</option><option value='east'>East</option><option value='south'>South</option><option value='west'>West</option></select><input type='hidden' name='tile' value='".$_GET['t']."'> <input type='submit'></form>";
@@ -434,7 +434,7 @@
 					$tInfo = mysql_fetch_array(mysql_query("SELECT * FROM world WHERE id='".$_GET['t']."';"));
 					if ($tInfo['owner'] == $user) {
 
-						
+
 
 						$result = mysql_query("SELECT * FROM structures");
 						while ($row = mysql_fetch_assoc($result)) {
@@ -448,14 +448,14 @@
 
 							}
 					          if ($row['requirement'] == $tInfo['type'] and $hasRequirement == true) {
-					            echo "<a href='index.php?a=construct&type=".$row['name']."&t=".$_GET['t']."'>".$row['name']."</a> (".$row['value']." ".$row['action']."/hour) (<img src='http://www.ahoyworld.co.uk/public/style_images/master/eco_images/money.png'>".($row['cost']/100).", <img src='img/tree.png'>".$row['wood'].", ".$row['time']."<img src='http://www.messinaoggi.it/img/icona-time.png'>)<br>"; //MODIFY THIS LINE AND ADD IN BEFORE IT TO FIND STUFF THAT WAS UPDATED
+					            echo "<a href='index.php?a=construct&type=".$row['name']."&t=".$_GET['t']."'>".$row['name']."</a> (+ ".$row['value']." ".$row['action'].") (<img src='img/Gold.png'>".($row['cost']/100).", <img src='img/tree.png'>".$row['wood'].", ".$row['time']."<img src='http://www.messinaoggi.it/img/icona-time.png'>)<br>"; //MODIFY THIS LINE AND ADD IN BEFORE IT TO FIND STUFF THAT WAS UPDATED
 					          }
 							}
 
 					} else {
 						echo "Naughtyy ;)<br>";
 					}
-				
+
 				} elseif ($a == "mu") {
 					$tInfo = mysql_fetch_array(mysql_query("SELECT * FROM world WHERE id='".$_GET['t']."';"));
 					echo "<form action='index.php?a=moveUnits' method='post'>Move <input type='number' name='unitCount' min='1' max='".($tInfo['units']-1)."'> units <select name='direction' selected='".$defDir."'><option value='north'>North</option><option value='east'>East</option><option value='south'>South</option><option value='west'>West</option></select><input type='hidden' name='tile' value='".$_GET['t']."'> <input type='submit'></form>";
@@ -464,14 +464,14 @@
 				echo "<b>View: </b><a href='index.php?a=view&v=units'>Units</a> - <a href='index.php?a=view&v=worth'>Worth</a> - <a href='index.php?a=view&v=none'>None</a><br>";
 				echo "</td><td>";
 				echo "<center><a href='index.php?a=move&dir=n'><img src='img/n.png'></a><br><a href='index.php?a=move&dir=w'><img src='img/w.png'></a><a href='index.php?a=castle'><img src='img/Castle.png'></a><a href='index.php?a=move&dir=e'><img src='img/e.png'></a><br><a href='index.php?a=move&dir=s'><img src='img/s.png'></a><br>";
-				
+
 
 				if ($a == "" or $a == "move" or $a == "moveUnits" or $a == "castle" or $a == "view") {
-					
+
 				}
 
 				echo "</td></td></tr></td></table>";
 			}
 		}
 	}
-echo "<br><font size=0.5>For optimal gameplay, use Firefox; Chrome does something screwy with the image loading that makes everything feel jolty and odd.</font>";
+echo "<br><font size=0.5>Thanks for playing!</font>";
